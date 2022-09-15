@@ -1,5 +1,5 @@
 # paketit
-list.of.packages <- c("shiny", "dplyr","leaflet","sf","bslib","shinyWidgets","ragg","shinycssloaders")
+list.of.packages <- c("shiny", "dplyr","leaflet","sf","bslib","shinyWidgets","ragg","shinycssloaders","lubridate","leaflet.extras")
 # Käytä paketteja
 lapply(list.of.packages, require, character.only = TRUE)
 
