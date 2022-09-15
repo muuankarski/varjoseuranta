@@ -20,7 +20,6 @@ install.packages("gert")
 library(gert)
 repo <- git_clone("https://github.com/muuankarski/varjoseuranta")
 setwd("varjoseuranta")
-shiny::
 shiny::runApp()
 ```
 
