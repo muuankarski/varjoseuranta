@@ -116,10 +116,40 @@ server <- function(input, output) {
     input$submit_loc
 
     urli <- "https://www.randonneurs.fi/live/ruska2022/current.kml"
-    layers <- sf::st_layers(urli)
-    dat4 <- sf::st_read(urli, layer = layers$name) |> sf::st_zm() %>% 
-      mutate(labName = gsub(" min ago", "m", Name),
-             kuvaus = gsub("<a", "<br/><a", gsub("<p>|</p>|</h5>", "", gsub("<h5 align=center>", "<br/>Nro: ", gsub("h4", "strong", description))))) #%>% 
+    if (httr::status_code(httr::GET(urli)) == 200){
+      layers <- sf::st_layers(urli)
+      dat1 <- sf::st_read(urli, layer = layers$name) |> sf::st_zm() %>% 
+        mutate(labName = gsub(" min ago", "m", Name),
+               kuvaus = gsub("<a", "<br/><a", gsub("<p>|</p>|</h5>", "", gsub("<h5 align=center>", "<br/>Nro: ", gsub("h4", "strong", description))))) #%>% 
+      
+      
+      urli <- "https://www.randonneurs.fi/live/ruska2022/iida-current.kml"
+      layers <- sf::st_layers(urli)
+      dat2 <- sf::st_read(urli, layer = layers$name) |> sf::st_zm() %>% 
+        mutate(labName = gsub(" min ago", "m", Name),
+               kuvaus = gsub("<a", "<br/><a", gsub("<p>|</p>|</h5>", "", gsub("<h5 align=center>", "<br/>Nro: ", gsub("h4", "strong", description)))))
+      dat4 <- rbind(dat1,dat2)
+    } else {
+      dat4 <- structure(list(Name = "Data Puuttuu (1 min ago)", 
+                    description = "<h4 align=\"center\">Petteri Punakuono</h4><h5 align=center>666</h5><p><a href=\"https://twitter.com/mkpaa\">Twitter</a> </p>", 
+                    timestamp = structure(NA_real_, class = c("POSIXct", "POSIXt"
+                    )), begin = structure(NA_real_, class = c("POSIXct", "POSIXt"
+                    )), end = structure(NA_real_, class = c("POSIXct", "POSIXt"
+                    )), altitudeMode = NA_character_, tessellate = -1L, extrude = 0L, 
+                    visibility = -1L, drawOrder = NA_integer_, icon = NA_character_, 
+                    labName = "Data Puuttuu (1 min ago)", kuvaus = "<strong align=\"center\">Data Puuttuu</strong><br/>", 
+                    geometry = structure(list(structure(c(27.58999, 64.96176
+                    ), class = c("XY", "POINT", "sfg"))), class = c("sfc_POINT", 
+                                                                    "sfc"), precision = 0, bbox = structure(c(xmin = 27.58999, 
+                                                                                                              ymin = 64.96176, xmax = 27.58999, ymax = 64.96176), class = "bbox"), crs = structure(list(
+                                                                                                                input = "WGS 84", wkt = "GEOGCRS[\"WGS 84\",\n    DATUM[\"World Geodetic System 1984\",\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    ID[\"EPSG\",4326]]"), class = "crs"), n_empty = 0L)), sf_column = "geometry", agr = structure(c(Name = NA_integer_, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   description = NA_integer_, timestamp = NA_integer_, begin = NA_integer_, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   end = NA_integer_, altitudeMode = NA_integer_, tessellate = NA_integer_, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   extrude = NA_integer_, visibility = NA_integer_, drawOrder = NA_integer_, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   icon = NA_integer_, labName = NA_integer_, kuvaus = NA_integer_
+                                                                                                                ), levels = c("constant", "aggregate", "identity"), class = "factor"), row.names = 1L, class = c("sf", 
+                                                                                                                                                                                                                 "data.frame"))
+    }
 
     return(dat4)
   })
