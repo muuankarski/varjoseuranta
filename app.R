@@ -169,13 +169,13 @@ server <- function(input, output) {
 
   output$map <- renderLeaflet({
 
-    dat <- get_data()
+    # dat <- get_data()
 
     base0 <- leaflet()
     base0 %>% 
-      addCircleMarkers(data = dat,
-                                        opacity = 0,
-                                        fillOpacity = 0) %>%
+      leaflet::setView(lng = 21.278333, lat = 69.323611, zoom = 8) %>% 
+      # addCircleMarkers(data = dat, opacity = 0,
+      #                                   fillOpacity = 0) %>%
       addTiles(
         urlTemplate = 
           "http://tiles.kartat.kapsi.fi/peruskartta/{z}/{x}/{y}.jpg",
