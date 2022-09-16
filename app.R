@@ -162,10 +162,15 @@ server <- function(input, output) {
       dat$labName
       ) %>%
         lapply(htmltools::HTML)
+    
+    dat1 <- cbind(dat,st_coordinates(dat))
       
       popups <- sprintf(
-        "%s<br/>",
-        dat$kuvaus
+        "%s<br/>
+        <a target = '_blank' href='https://maps.google.com/?q=%s,%s'>Avaa GMapsissa</a><br/>",
+        dat1$kuvaus,
+        dat1$Y,
+        dat1$X
       ) %>%
         lapply(htmltools::HTML)
 
